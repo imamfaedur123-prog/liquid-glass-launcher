@@ -41,9 +41,16 @@ jobs:
           unzip -q /tmp/gradle.zip -d /opt
           echo "/opt/gradle-8.5/bin" >> $GITHUB_PATH
 
+      - name: Verify Gradle
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          /opt/gradle-8.5/bin/gradle --version
+
       - name: Build APK
         working-directory: launcher-app
-        run: /opt/gradle-8.5/bin/gradle assembleDebug
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          /opt/gradle-8.5/bin/gradle assembleDebug --stacktrace --info 2>&1 | tail -50
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
