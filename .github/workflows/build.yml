@@ -39,11 +39,14 @@ jobs:
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /opt
-          echo "/opt/gradle-8.5/bin" >> $GITHUB_PATH
+          echo "GRADLE_HOME=/opt/gradle-8.5" >> $GITHUB_ENV
+
+      - name: Verify Gradle
+        run: /opt/gradle-8.5/bin/gradle --version
 
       - name: Build APK
         working-directory: launcher-app
-        run: gradle assembleDebug
+        run: /opt/gradle-8.5/bin/gradle assembleDebug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
